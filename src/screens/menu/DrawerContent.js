@@ -27,10 +27,12 @@ const BillTitle = () => (
   </View>
 );
 
-const BillItem = ({item, quantity, total}) => (
+const BillItem = ({item, quantity, total, onDeletePress}) => (
   <View>
     <View style={{position: 'absolute', justifyContent: 'center', bottom: 0,  width: '100%', alignItems: 'flex-end'}}>
-      <TouchableOpacity style={{backgroundColor: 'rgba(255, 0, 0, 0.5)', paddingLeft: 20, paddingRight: 20, paddingTop: 5, paddingBottom :5}}>
+      <TouchableOpacity style={{backgroundColor: 'rgba(255, 0, 0, 0.5)', paddingLeft: 20, paddingRight: 20, paddingTop: 5, paddingBottom :5}}
+        onPress={onDeletePress}
+      >
       <Icon name='times' size={30} color={'rgba(244, 255, 255, 0.6)'}/>
       </TouchableOpacity>
     </View>
@@ -61,7 +63,21 @@ const BillItem = ({item, quantity, total}) => (
   </View>
 );
 export default class DrawerContent extends React.Component {
+
+  
+  componentWillMount = () => {
+   //
+  }
+  onDeletePress = (i) => {
+    this.setState({
+      data: Object.entries(this.state.data).filter((val, index) => val[1] > 0 && index !== i)
+    });
+  }
+
   render() {
+    //onDeletePress as a props;
+    const { data } = this.props;
+    const itemViews = Object.entries(data).filter(val => val[1] > 0).map((val, index) => <BillItem item={val[0]} quantity={val[1]} key={index} index={index} onDeletePress={() => this.props.onDeletePress(index)}/>);
     return (
       <ScrollView style={styles.container}>
           <View>
@@ -75,8 +91,7 @@ export default class DrawerContent extends React.Component {
           </View>
         
           <BillTitle />
-          <BillItem />
-          <BillItem />
+          {itemViews}
         
       </ScrollView>
     );

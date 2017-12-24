@@ -127,8 +127,15 @@ class MenuScreen extends Component {
     this.categoriesData[name] = data;
     this.setState({
       totalCount: Object.values(this.categoriesData).reduce((acc, val) => acc + MenuScreen.counter(val), 0),
+      dataToDialog: Object.values(this.categoriesData).reduce((acc, val) => ({ ...acc, ...val }), {}),
     });
   };
+
+  onDeletePress = (i) => {
+    this.setState({
+      dataToDialog: Object.values(this.categoriesData).reduce((acc, val, index) => (index !== i ? { ...acc, ...val } : { ...acc }), {}),
+    });
+  }
 
   _onPress = () => {
     const navigateAction = NavigationActions.navigate({
@@ -140,7 +147,7 @@ class MenuScreen extends Component {
   _onFabLongPress = () => {
     this.setState({
       dialogVisible: true,
-      dataToDialog: Object.values(this.categoriesData).reduce((acc, val) => ({ ...acc, ...val }), {}),
+      
     });
   }
   _onDialogClosePress = () => {
@@ -179,7 +186,7 @@ class MenuScreen extends Component {
     return (
       <Drawer
         type="static"
-        content={<DrawerContent />}
+        content={<DrawerContent data={dataToDialog} onDeletePress={this.onDeletePress} />}
         openDrawerOffset={100}
         
         styles={{backgroundColor: 'red'}}
@@ -206,19 +213,9 @@ class MenuScreen extends Component {
           backgroundSpeed={5}
           renderBackground={() => (
             <View style={{height: 250, backgroundColor: 'rgba(0, 0, 0, 0)', justifyContent: 'center', alignItems: 'center'}}>
-              <Icon name='rocket' size={100} color='rgba(0, 0, 0, 0.03)'/>
+              <Icon name='rocket' size={100} color='rgba(0, 0, 0, 0.08)'/>
             </View>
           )}
-          
-          renderStickyHeader={() =>
-          (
-          <View style={{height: 100, backgroundColor: '#7947FF', alignItems: 'center',  ...shadow, flexDirection: 'row', justifyContent: 'space-between', paddingRight: 20 }} >
-            
-            <Text style={{fontSize: 40, color: 'white', backgroundColor: 'rgba(0, 0, 0, 0)', fontFamily: 'Avenir-black'}}> Order </Text>
-            <Icon name='ellipsis-v' size={35} color={'white'} />
-          </View>
-          )}
-          stickyHeaderHeight={0}
           renderForeground={() =>
           (<View style={{ backgroundColor: 'rgba(0, 0, 0, 0) ', justifyContent: 'center', paddingTop: 40, paddingLeft: 20}}>
             <View style={{flexDirection: 'row', justifyContent: 'space-between', paddingRight: 20}}>
