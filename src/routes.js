@@ -1,6 +1,6 @@
 import { StackNavigator } from 'react-navigation';
 import { LoginScreen, TableScreen, MenuScreen } from './screens';
-
+// from
 const Main = StackNavigator({
   LoginScreen: {
     screen: LoginScreen,
